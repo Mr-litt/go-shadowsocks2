@@ -68,7 +68,7 @@ func main() {
 	flag.StringVar(&flags.UDPTun, "udptun", "", "(client-only) UDP tunnel (laddr1=raddr1,laddr2=raddr2,...)")
 	flag.DurationVar(&config.UDPTimeout, "udptimeout", 5*time.Minute, "UDP tunnel timeout")
 
-	flag.BoolVar(&flags.EmailSwitch, "EmaiEmailSwitchlSwitch", false, "emailSwitch")
+	flag.BoolVar(&flags.EmailSwitch, "EmailSwitch", false, "emailSwitch")
 	flag.StringVar(&flags.EmailUserName, "EmailUserName", "", "emailUserName")
 	flag.StringVar(&flags.EmailPassword, "EmailPassword", "", "emailPassword")
 	flag.StringVar(&flags.ValidIps, "ValidIps", "", "ValidIps")
