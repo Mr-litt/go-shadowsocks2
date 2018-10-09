@@ -6,6 +6,8 @@ import (
 	"time"
 
 	"github.com/shadowsocks/go-shadowsocks2/socks"
+	"github.com/shadowsocks/go-shadowsocks2/monitor"
+	"strings"
 )
 
 // Create a SOCKS server listening on addr and proxy to server.
@@ -126,6 +128,14 @@ func tcpRemote(addr string, shadow func(net.Conn) net.Conn) {
 			rc.(*net.TCPConn).SetKeepAlive(true)
 
 			logf("proxy %s <-> %s", c.RemoteAddr(), tgt)
+
+			// Ip监控
+			cut := strings.Index(c.RemoteAddr().String(), ":")
+			if cut > 0 {
+				ipAddr := string([]byte(c.RemoteAddr().String())[0:cut])
+				logf("monitor ipAddr %s", ipAddr)
+				go monitor.GMonitorIp.Add(ipAddr)
+			}
 			_, _, err = relay(c, rc)
 			if err != nil {
 				if err, ok := err.(net.Error); ok && err.Timeout() {

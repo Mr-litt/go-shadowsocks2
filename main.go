@@ -16,6 +16,7 @@ import (
 
 	"github.com/shadowsocks/go-shadowsocks2/core"
 	"github.com/shadowsocks/go-shadowsocks2/socks"
+	"github.com/shadowsocks/go-shadowsocks2/monitor"
 )
 
 var config struct {
@@ -46,6 +47,10 @@ func main() {
 		TCPTun    string
 		UDPTun    string
 		UDPSocks  bool
+		EmailSwitch bool
+		EmailUserName string
+		EmailPassword string
+		ValidIps string
 	}
 
 	flag.BoolVar(&config.Verbose, "verbose", false, "verbose mode")
@@ -62,7 +67,16 @@ func main() {
 	flag.StringVar(&flags.TCPTun, "tcptun", "", "(client-only) TCP tunnel (laddr1=raddr1,laddr2=raddr2,...)")
 	flag.StringVar(&flags.UDPTun, "udptun", "", "(client-only) UDP tunnel (laddr1=raddr1,laddr2=raddr2,...)")
 	flag.DurationVar(&config.UDPTimeout, "udptimeout", 5*time.Minute, "UDP tunnel timeout")
+
+	flag.BoolVar(&flags.EmailSwitch, "EmaiEmailSwitchlSwitch", false, "emailSwitch")
+	flag.StringVar(&flags.EmailUserName, "EmailUserName", "", "emailUserName")
+	flag.StringVar(&flags.EmailPassword, "EmailPassword", "", "emailPassword")
+	flag.StringVar(&flags.ValidIps, "ValidIps", "", "ValidIps")
+
 	flag.Parse()
+
+	// Ip监控初始化
+	monitor.InitMonitorIp(flags.EmailSwitch, flags.EmailUserName, flags.EmailPassword, flags.ValidIps)
 
 	if flags.Keygen > 0 {
 		key := make([]byte, flags.Keygen)
